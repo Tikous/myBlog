@@ -67,7 +67,7 @@ export default async function BlogPost({ params }: { params: { id: string } }) {
           <div className="flex items-center gap-2 mb-6">
             <Tag size={16} className="text-gray-500" />
             <div className="flex flex-wrap gap-2">
-              {post.tags.map((tag) => (
+              {post.tags.map((tag: { id: number; name: string }) => (
                 <span
                   key={tag.id}
                   className="px-2 py-1 bg-blue-100 text-blue-800 text-sm rounded-full"
