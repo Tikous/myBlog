@@ -1,22 +1,22 @@
 import { PrismaClient } from '@prisma/client'
 
-// 写入数据库连接（主实例）
-const writeClient = new PrismaClient({
+// Prisma客户端配置
+const createPrismaClient = (url: string) => new PrismaClient({
   datasources: {
-    db: {
-      url: process.env.DATABASE_WRITE_URL || process.env.DATABASE_URL
-    }
-  }
+    db: { url }
+  },
+  log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
 })
 
+// 写入数据库连接（主实例）
+const writeClient = createPrismaClient(
+  process.env.DATABASE_WRITE_URL || process.env.DATABASE_URL || ''
+)
+
 // 读取数据库连接（读取副本）
-const readClient = new PrismaClient({
-  datasources: {
-    db: {
-      url: process.env.DATABASE_READ_URL || process.env.DATABASE_URL
-    }
-  }
-})
+const readClient = createPrismaClient(
+  process.env.DATABASE_READ_URL || process.env.DATABASE_URL || ''
+)
 
 // 全局实例管理
 const globalForPrisma = globalThis as unknown as {

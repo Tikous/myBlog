@@ -11,7 +11,14 @@ export async function GET() {
       orderBy: { createdAt: 'desc' },
     })
     
-    return NextResponse.json(posts)
+    // 禁用缓存，确保获取最新数据
+    return NextResponse.json(posts, {
+      headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0'
+      }
+    })
   } catch (error) {
     console.error('获取博客列表失败:', error)
     return NextResponse.json(
